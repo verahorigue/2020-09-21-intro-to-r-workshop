@@ -2,6 +2,7 @@
 # A very quick demonstation of the sorts of things your can do with R
 #
 
+# Updated 21-Sep-20 during R Workshop
 
 # Load the GGPLOT2 library
 library(ggplot2)
