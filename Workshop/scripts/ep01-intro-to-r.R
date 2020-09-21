@@ -219,26 +219,27 @@ glengths
 species <- c("ecoli", "human", "corn")
 species
 
-length(glengths)
-length(species)
+length(glengths) #there are 3 data inputs
+length(species)  #there are 3 species
 
-5 * glengths
+5 * glengths     #multiply all the data inputs in your object by 5
 
 double_lengths <- glengths + glengths
 double_lengths
 
-class(glengths)
-class(species)
+class(glengths) #will describe things as numeric
+class(species)  #will describe things as characters
 
-str(glengths)
-str(species)
+str(glengths)  #summary and describes the elements in an object
+str(species)   #summary and description of the elements in an object
 
-lengths <- c(glengths, 90)        # adding at the end
+lengths <- c(glengths, 90)        # adding at the end 
 lengths <- c(30, glengths)        # adding at the start
 lengths
+# the answer will be 30.0 4.6 3000.0 50000.0
 
-# note all the elements have to be the same type
-length_species <- c(4.5, "ecoli")
+# note all the elements in a vector have to be the same type (i.e., all numbers or all text)
+length_species <- c(4.5, "ecoli") #this converts a textual representation of the number --> "4.5"
 length_species
 
 # This automatic conversion is called 'coercion' or 'casting' ..
@@ -246,9 +247,10 @@ length_species
 # and there are other types as well ...
 sqrt_of_minus_one <- 1i
 true_or_false_value <- TRUE
-decimal_number = 54.0
-whole_number = -54L
+decimal_number <- 54.0
+whole_number <- -54L
 
+                                  #VH:use < - to assign values to an objects; use = when you assign a value to a parameter
 
 class(sqrt_of_minus_one)
 class(true_or_false_value)
@@ -272,10 +274,10 @@ class(decimal_number)
 #
 # What will happen in each of these examples?
 #
-#   num_char <- c(1, 2, 3, "a")
-#   num_logical <- c(1, 2, 3, TRUE)
-#   char_logical <- c("a", "b", "c", TRUE)
-#   tricky <- c(1, 2, 3, "4")
+  num_char <- c(1, 2, 3, "a") #class is character because of "a" 
+  num_logical <- c(1, 2, 3, TRUE) #class is numeric
+  char_logical <- c("a", "b", "c", TRUE) #class is character, true value is changed to character
+  tricky <- c(1, 2, 3, "4") #class is character because of "4" --> written as a text
 #
 # [Hint: use class() to check the data type of your objects]
 #
@@ -297,28 +299,30 @@ class(decimal_number)
 # Presented by: Evan Matthews
 
 animals <- c("mouse", "rat", "dog", "cat")
-animals[2]
-animals[c(3, 2)]
+animals[2]             #if you want to get the second element, brackets is for elements
+animals[c(3, 2)]       #if you want to get the third and second element, in order   
 
-more_animals <- animals[c(1, 2, 3, 2, 1, 4)]
+more_animals <- animals[c(1, 2, 3, 2, 1, 4)]   #this will produce a bigger list of animals, which includes elements of the previous
 more_animals
 
 # Conditional subsetting
 weight_g <- c(21,   34,    39,   54,   55)
-weight_g[   c(TRUE, FALSE, TRUE, TRUE, FALSE)]
+weight_g[   c(TRUE, FALSE, TRUE, TRUE, FALSE)] #will select the elements that are TRUE
 
-weight_g > 50
-weight_g[weight_g > 50]
+weight_g > 50     #will give a logical expression for each of the element in your object
+weight_g[weight_g > 50]  #will give you elements that are bigger than 50
 
-weight_g[weight_g < 30 | weight_g > 50]
+weight_g[weight_g < 30 | weight_g > 50]  #the bar key is a pike that is equivalent to 'OR'; select elements <30 and >50
 
-weight_g[weight_g >= 30 & weight_g == 21]
+weight_g[weight_g >= 30 & weight_g == 21] 
 
 animals <- c("mouse", "rat", "dog", "cat")
 animals[animals == "cat" | animals == "rat"] # returns both rat and cat
 
-animals %in% c("rat", "cat", "dog", "duck", "goat")
-animals[animals %in% c("rat", "cat", "dog", "duck", "goat")]
+# %in% tells you an element is part of a dataframe
+
+animals %in% c("rat", "cat", "dog", "duck", "goat") #for all the animals, are all the animals are in this set
+animals[animals %in% c("rat", "cat", "dog", "duck", "goat")] #in this animal array, give me the subset animals
 
 # Challenge
 #
@@ -328,35 +332,50 @@ animals[animals %in% c("rat", "cat", "dog", "duck", "goat")]
 #
 # returns TRUE?
 #
-# Answer:
+# Answer: because they are all characters and not integers/ numerical, comparison is based on alphabetical
 
 
 # Topic: Missing data (NA - Not Available)
 
+
 heights <- c(2, 4, 4, NA, 6)
-mean(heights)
-max(heights)
-mean(heights, na.rm = TRUE)
-max(heights, na.rm = TRUE)
+mean(heights)                       #will show NA
+max(heights)                        #will show NA 
+mean(heights, na.rm = TRUE)         #will omit NA
+max(heights, na.rm = TRUE)          #will omit NA
 
-heights[!is.na(heights)]
-na.omit(heights)
-heights[complete.cases(heights)]
+#to check elements
+is.na(heights)           #which elements are NA - will give logical
+!is.na(heights)          #which elements are not NA - will give logical   
 
-#
+heights[!is.na(heights)] #another way of removing NA, this will show elements that are not NA
+heights[complete.cases(heights)] #another way of removing NA, this will show elements that are not NA and print
+
+#this is the most efficient???
+na.omit(heights)         #another way of removing NA, this will show elements that are not NA
+
+
 # Exercise (extended)
 #
 #
 # Using this vector of heights in inches, create a new vector 
 # with the NAs removed.
 # 
-#   heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+
 #
 # Solution
+
+na.omit(heights)
+
 
 # Use the function median() to calculate the median of the heights vector.
 #
 # Solution
+
+median(na.omit(heights))
+median(heights, na.rm= TRUE)
+
 
 # Use R to figure out how many people in the set are taller than 67 inches.
 #
