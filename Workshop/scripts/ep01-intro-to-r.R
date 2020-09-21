@@ -10,11 +10,11 @@
 # Topic: Basic Calculations and using Objects
 # Presented by: Belinda Fabian
 
-# R can do sums ...
+# R can do sums and divisions ...
 3 + 5
 12 / 7
 
-# other operators
+# other operators -- subtraction, multiplication, and power of
 #
 # - * / ** ^ ( )
 
@@ -25,12 +25,12 @@
 # What does: 11 + 1 / 6  evaluate to ?
 
 # Solution:
-
+11+1/6
 
 # Calculate 10 plus 2 all divided by 3 and then squared
 
 # Solution:
-
+((10+2)/3)^2
 
 
 
@@ -48,22 +48,34 @@ a + b               # we can add them together just like numbers
 # --------
 #
 # What happens if we change a and then re-add a and b? [Hint: Try it now]
-#
+
+a = 2
+a + b
+
 # Does it work if you just change a in the script and then add a and b? [Hint: Try it]
-#
+
+a = 10
+a + b
+
 # Did you still get the same answer after you changed a? 
 # If so, why do you think that might be?
-#
+# You need to store the variable in the script and run it
+
 # We can also assign the result of a + b to a new variable, c. 
 # How would you do this?
-#
-# Solution:
 
+
+# Solution:
+c = a + b 
 
 
 # Logical operators
 #
 # == != < > >= <= !
+# == means exactly equal to
+# ! means not
+# != means not equal to
+# < means less than, > greater than; <= means less than or equal to, >= means greater than or equal to 
 1 < 124
 
 #
@@ -72,35 +84,42 @@ a + b               # we can add them together just like numbers
 date_of_birth <- 7
 z <- 19.5
 THEMOL <- 42
-camelCaseIsGenerallyNotRecommended <- "Unless you follow Google's Style guide"
+camelCaseIsGenerallyNotRecommended <- "Unless you follow Google's Style guide" #this is a mixed capital and small caps
 names_that_are_unreasonably_long_are_not_a_good_idea <- "correct"
 nouns_are_good <- TRUE
 TRUE <- 17
 ekljre2jklwef023ijlefj93jkl23rj90f32k <- 1
 
 # 
-# Exercise
+### Exercise
 # 
 #
 # Assign the name of this workshop to a object with a good name.
 #
 # Solution: [Hint:       <- "Introduction to R"]
 
+workshop_name = "Introduction to R"
+
 # Assign the name of video conferencing tool we are using to an object
 #
 # Solution: [Hint:      <- "Zoom"]
 
+conference_tool = "Zoom"
 
-# Which of these are valid object names: [Hint: Try them out]
-#
-#  min_height
-#  max.height
-#  _age
-#  .mass
-#  MaxLength
-#  min-length
-#  2widths
-#  celsius2kelvin
+
+# Which of these are valid object names: [Hint: Try them out] -- VH: in Windows highlight the lines and press CTRL+shift+c
+# VH: to check for the valid names, the ones that are invalid will be marked with an X
+
+ min_height = 2
+ max.height = 3
+# _age #this is invalid because of the underscore is a special character
+ _age = 9
+ .mass = 10
+ MaxLength = 8 #can have mix caps and small caps, but easy to forget them, so just stick to just one
+ min-length = 11
+ #2widths #because of the number
+ 2widths = 20
+ celsius2kelvin = 2 #can mix numbers and letters, just don't start with a number
 
 #
 # Topic: Displaying results
@@ -124,13 +143,15 @@ weight_kg
 # 
 # 
 # What are the values after each statement in the following?
-# 
-# mass <- 47.5            # mass is: 
-# age  <- 122             # age is:
-# mass <- mass * 2.0      # mass is:
-# age  <- age - 20        # age is:
-# mass_index <- mass/age  # mass_index is: 
-#
+ 
+
+mass <- 47.5            # mass is: 47.5
+age  <- 122             # age is: 122
+mass <- mass * 2.0      # mass is: 95
+age  <- age - 20        # age is: 102
+mass_index <- mass/age  # mass_index is: 0.93137525
+
+# VH - we are overriding/ reassigning the values to the original variables -- mass and age
 # How do we do we know if our answers are correct ? 
 # [Hint: <highlight> [ALT][ENTER]
 
@@ -148,16 +169,18 @@ weight_kg
 # Exercise
 # 
 #
-# Add explanatory comments to the following lines of code
+# Add explanatory comments to the following lines of code (VH: added comments below)
+# VH: add comments to explain conversion
 
-ft <- 3
-in <- ft * 12
-cms <- in * 2.54
-m = cms / 100
+ft <- 3               #length in foot/ feet is 3
+in <- ft * 12         #length in inches, convert from feet mutliply by 12
+cms <- in * 2.54      #length in centimetres (cm), multiply inches by 2.54
+m = cms / 100         #length in metres (m), multiply cm by 100
 
 #
 # Topic: Functions and Arguments
-#
+
+a = 16
 sqrt(2)
 sqrt(a)
 abs(-23.3)
@@ -177,6 +200,11 @@ round(digits = 2, x = 3.14159)
 # what does the function called log10() do ?  Can you test it ?
 #
 # Answer:
+
+log10("cat") #Error, because "cat" is not numerical
+log10(10)
+log10(100)
+?log10
 
 
 
