@@ -384,4 +384,6 @@ median(heights, na.rm= TRUE)
 sort (heights, decreasing = FALSE) #sorts data in increasing order
 sort (heights, decreasing = TRUE)  #sorts data in decreasing order
 
-#hi_height <- is.na(heights) > 67
+# Solution
+length(heights[heights > 67]) # index by heights > 67 and count observations using length(). Returns 8, however this includes NA values!
+length(heights[heights > 67 & !is.na(heights)]) # returns 6 after excluding NA values.
