@@ -378,6 +378,10 @@ median(heights, na.rm= TRUE)
 
 
 # Use R to figure out how many people in the set are taller than 67 inches.
-#
 # [Hint: R has a builtin function called length() that tells you 
 # how many values are in a vector
+
+sort (heights, decreasing = FALSE) #sorts data in increasing order
+sort (heights, decreasing = TRUE)  #sorts data in decreasing order
+
+#hi_height <- is.na(heights) > 67
