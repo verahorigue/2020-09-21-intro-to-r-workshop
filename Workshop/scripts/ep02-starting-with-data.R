@@ -226,32 +226,57 @@ as.numeric(year)                      #this will save the factors as a set of nu
 as.character(year)                    #this will save the factors as characters (numbers as text) that you can't use for calcs
 as.numeric(as.character(year))        #this will save the factors as a number and character, which you can use for calcs
 
-# so does our survey data have any factors
+# so does our survey data have any factors?
+
+str(surveys)    #will tell you which variables are factors
 
 
-#
-# Topic:  Dealing with Dates
-#
+### Topic:  Dealing with Dates
 
 # R has a whole library for dealing with dates ...
 
+library(lubridate)    #install the package to deal with dates
 
+my_date <- ymd("2015-01-01")    #ymd -- year month date function
+class(my_date)
 
-# R can concatenated things together using paste()
+# date: 7-16-1977 --> create this by pasting three columns together
 
+# R can concatenate things together using paste()
+
+paste("abc", "123", "xyz")
+paste("abc", "123", "xyz", sep= "+")  #adds a plus symbol for the separator
+paste("abc", "123", "xyz", sep= "-")  #adds a hyphen for the separator
+paste("2015", "01", "26", sep= "-")
+
+my_date <- ymd(paste("2015", "01", "26", sep= "-"))    #ymd -- year month date function
+class(my_date)
 
 # 'sep' indicates the character to use to separate each component
 
-
 # paste() also works for entire columns
 
+paste(surveys$year, surveys$month, surveys$day, sep="-")
 
 # let's save the dates in a new column of our dataframe surveys$date 
+# this creates a new column and use lubridate to paste the three columns together
 
+surveys$date <- ymd(paste(surveys$year, surveys$month, surveys$day, sep="-"))
 
 # and ask summary() to summarise 
-
+summary(surveys)
 
 # but what about the "Warning: 129 failed to parse"
+# some data couldn't be converted to a date because it was indicated as NA
 
+summary(surveys$date)
 
+# find the rows that have NAs in the data.frame
+
+is.na(surveys$date)
+missing_dates <- surveys[is.na(surveys$date), "date"]
+missing_dates
+
+# the data entries could not be converted because some of the months don't have 31 days
+missing_dates <- surveys[is.na(surveys$date), c("record_id", "year", "month", "day")]
+summary(missing_dates)                         
