@@ -15,8 +15,13 @@
 download.file(url = "https://ndownloader.figshare.com/files/2292169",
               destfile = "data_raw/portal_data_joined.csv")
 
+# The data is downloaded into your Rproj folder, instead of your desktop. If your desktop, the directory should be included
+
 # now we will read this "csv" into an R object called "surveys"
 surveys <- read.csv("data_raw/portal_data_joined.csv")
+surveys <- read.csv("data_raw/portal_data_joined.csv", header = TRUE) # will let R know that the first row is a header
+
+View(surveys) #views your data like a spreadsheet, first letter has to be capital
 
 # and take a look at it
 
@@ -25,15 +30,24 @@ surveys <- read.csv("data_raw/portal_data_joined.csv")
 # BTW, we assumed our data was comma separated, however this might not
 # always be the case. So we may been to tell read.csv more about our file.
 
-
-
 # So what kind of an R object is "surveys" ?
+
+class(surveys)              # R will respond and say it is a data.frame
 
 
 
 # ok - so what are dataframes ?
 
+str(surveys)                # will tell you the structure of the data.frame, including no. of rows, cols, etc.
+dim(surveys)                # will tell you the dimension of the data.frame (i.e., x vs y)
+nrow(surveys)               # will tell you the number of the rows (number of observations)
+ncol(surveys)               # will tell you the number of columns (number of variables)
 
+head(surveys, 20)           # will show you the first 20 rows
+tail(surveys, 2)            # will show you the last 2 rows
+
+names(surveys)                     # will give the headers for the columns
+rownames(surveys)                  # will just give the labels (in this case are id numbers) for the rows
 
 # --------
 # Exercise
@@ -43,20 +57,32 @@ surveys <- read.csv("data_raw/portal_data_joined.csv")
 #
 # Answer:
 
+data.frame 
 
 # How many rows and how many columns are in this survey ?
 #
-# Answer:
+# Answer: 34786 x 13
+
 
 # What's the average weight of survey animals
 #
 #
-# Answer:
+# Answer: 42.67243
 
-# Are there more Birds than Rodents ?
+#Option 1 -- Most efficient, if you're familiar with R already
+mean(surveys$weight, na.rm = TRUE) 
+
+#Option 2 -- If you want to explore the dataset
+summary(surveys)                   # will give you the summary statistics for each column
+
+# Are there more Birds than Rodents? 
+# From the summary, can have a look at the data already
 #
-#
-# Answer:
+# Answer:No
+
+# Or could do
+sum(surveys$taxa == "Rodent")      # Gets the sum of observations for rodents
+sum(surveys$taxa == "Bird")        # Gets the sum of observations for birds
 
 
 # 
@@ -64,16 +90,25 @@ surveys <- read.csv("data_raw/portal_data_joined.csv")
 #
 
 # first element in the first column of the data frame (as a vector)
+surveys[1,1]    # use brackets this time, this is x,y
 
 
 # first element in the 6th column (as a vector)
 
+surveys[1,6]
 
 # first column of the data frame (as a vector)
 
+surveys[,1]
+
+# sixth column of the data frame (as a vector)
+
+surveys[, 6]
 
 # first column of the data frame (as a data frame)
 
+#first_col_surveys <- surveys[,1]
+#data.frame(first_col_surveys)
 
 # first row (as a data frame)
 
