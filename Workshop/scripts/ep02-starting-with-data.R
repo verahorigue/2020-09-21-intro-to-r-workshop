@@ -279,4 +279,11 @@ missing_dates
 
 # the data entries could not be converted because some of the months don't have 31 days
 missing_dates <- surveys[is.na(surveys$date), c("record_id", "year", "month", "day")]
-summary(missing_dates)                         
+summary(missing_dates)  
+
+today <- ymd("2020-09-22")
+yesterday <- ymd("2020-09-21")
+boc <-ymd("0000-12-25")
+
+today - yesterday
+today - boc
