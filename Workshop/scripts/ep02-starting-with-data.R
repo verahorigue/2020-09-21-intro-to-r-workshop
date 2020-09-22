@@ -105,62 +105,126 @@ surveys[,1]
 
 surveys[, 6]
 
-# first column of the data frame (as a data frame)
+# first column of the data frame (as a data frame) 
+# note that a data frame cannot just have one column
 
-#first_col_surveys <- surveys[,1]
-#data.frame(first_col_surveys)
+surveys[1]                             #this selects the first column as a data frame, just one column data
+head(surveys[1])                       #shows the head of the first column as a data frame, as a column
+head(surveys[,1])                      #shows the head of the first column as a row
+
+# first three columns of the data frame (as a data frame)
+sel_surveys <- surveys[,1:3]           # this automatically saves the subset as a dataframe
+head(sel_surveys) 
+
 
 # first row (as a data frame)
-
+surveys[1,]
 
 # first three elements in the 7th column (as a vector)
-
+surveys[1:3, 7]
 
 # the 3rd row of the data frame (as a data.frame)
 
+surveys[3,]
 
-# equivalent to head(metadata)
+# equivalent to head(surveys)
 
+head(surveys)
+surveys[1:6,]
 
-# looking at the 1:6 more closely
+# looking at the 1:6 more closely -- shorthand for a range in sequence
 
+1:6
+5:10
+surveys[c(1,2,3,4,5,6),] # select first six rows
+surveys[c(2,4,6,8),]     # select even rows
 
 # we also use other objects to specify the range
 
-
+rows <- 6
+surveys[1:6, 3]
+surveys[1:rows, 3]
 
 #
 # Challenge: Using slicing, see if you can produce the same result as:
 #
-#   tail(surveys)
-#
+#tail(surveys)
+#surveys[5]                             #this selects the first column as a data frame, just one column data
+#tail(surveys[5])                       #shows the head of the first column as a data frame, as a column
+#tail(surveys[,5])                      #shows the head of the first column as a row
+
 # i.e., print just last 6 rows of the surveys dataframe
 #
 # Solution:
+nrow(surveys)                    # will show you the number of rows
+surveys[34781:nrow(surveys),]    # you can use nrow as the last number
+surveys[(nrow(surveys)-5):nrow(surveys),]    #but since you don't know the range until the last row, get the last row and the
+                                              #first five rows before it to make it as 6 rows
+
+# this is a cleaner and shorter version of the code above
+end <- nrow(surveys)
+surveys[(end-5):end,]
 
 
+# We can omit (leave out) columns using '-'-- minus sign
+surveys[-1]            #give me everything except the first column
 
-# We can omit (leave out) columns using '-'
+surveys[c(-1,-2,-3)]   #give me everything except the first three columns
+head(surveys[c(-1,-2,-3)] )
+head(surveys[c(-2,-3, -4)] ) # gives back the record id
+head(surveys[-(1:3)]) # negates the first three columns, if you want to omit columns in sequence
 
+-1:3 # is not the same as -(1:3)
 
 
 # column "names" can be used in place of the column numbers
 
-
+surveys["month"]
+head(surveys["month"])
 
 #
 # Topic: Factors (for categorical data)
 #
+# Examples:
+# ranking - high, medium, low;
+# gender - male, female;
+# Likert scales - very likely, likely, neutral
+# Country - Australia, New Zealand, australia -- this one is an error because of the capitals
 
+gender <- c("male", "male", "female")
+gender <- factor(c("male", "male", "female"))
+gender
 
-# factors have an order
+class(gender)
+levels(gender)
+nlevels(gender)
 
+# factors have an order  --- this will be printed alphabetically
+temperature <- factor(c("hot", "cold", "hot", "warm"))
+temperature[1] 
+temperature[2] 
+temperature[3] 
+
+class(temperature)
+levels(temperature)
+nlevels(temperature)
+
+# to rearrange the factors based on a different order
+temperature <- factor(c("hot", "cold", "hot", "warm"), level = c("cold", "warm", "hot"))
+levels(temperature)
 
 # Converting factors
 
+as.numeric(temperature)      #this will convert the factors into numbers, but you won't remember what these are
+as.character(temperature)    #this will convert the factors into strings
 
 # can be tricky if the levels are numbers
 
+year <- factor(c(1990, 1983, 1977, 1998, 1990))
+year
+as.numeric(year)                      #this will save the factors as a set of numbers that don't really make sense
+as.character(year)                    #this will save the factors as characters (numbers as text) that you can't use for calcs
+as.numeric(as.character(year))        #this will save the factors as a number and character, which you can use for calcs
 
 # so does our survey data have any factors
 
