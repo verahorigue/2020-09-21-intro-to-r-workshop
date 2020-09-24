@@ -15,35 +15,55 @@ download.file(url = "https://ndownloader.figshare.com/files/2292169",
 # Learning Objectives
 #---------------------
 
-#    Describe the purpose of the dplyr and tidyr packages.
-#    Select certain columns in a data frame with the dplyr function select.
-#    Select certain rows in a data frame according to filtering conditions with the dplyr function filter .
-#    Link the output of one dplyr function to the input of another function with the ‘pipe’ operator %>%.
-#    Add new columns to a data frame that are functions of existing columns with mutate.
-#    Use the split-apply-combine concept for data analysis.
-#    Use summarize, group_by, and count to split a data frame into groups of observations, apply summary statistics for each group, and then combine the results.
-#    Describe the concept of a wide and a long table format and for which purpose those formats are useful.
-#    Describe what key-value pairs are.
-#    Reshape a data frame from long to wide format and back with the pivit_wider and pivit_longer commands from the tidyr package.
-#    Export a data frame to a .csv file.
+# Describe the purpose of the dplyr and tidyr packages.
+# Select certain columns in a data frame with the dplyr function select.
+# Select certain rows in a data frame according to filtering conditions with the dplyr function filter .
+# Link the output of one dplyr function to the input of another function with the ‘pipe’ operator %>%.
+# Add new columns to a data frame that are functions of existing columns with mutate.
+# Use the split-apply-combine concept for data analysis.
+# Use summarize, group_by, and count to split a data frame into groups of observations, apply summary statistics for each group, and then combine the results.
+# Describe the concept of a wide and a long table format and for which purpose those formats are useful.
+# Describe what key-value pairs are.
+# Reshape a data frame from long to wide format and back with the pivit_wider and pivit_longer commands from the tidyr package.
+# Export a data frame to a .csv file.
 #----------------------
+
 
 #------------------
 # Lets get started!
 #------------------
 
+install.packages("tidyverse")
+library(tidyverse)
+# dplyr and tidyr
 
+# Load the dataset
+surveys <- read_csv("data_raw/portal_data_joined.csv")
+View(surveys)
 
-
+# Check the structure of the dataset
+str(surveys)
 
 
 #-----------------------------------
 # Selecting columns & filtering rows
 #-----------------------------------
+select(surveys, plot_id, species_id, weight)    #select these three columns
 
+#showed some errors, so doing it differently
 
+select(surveys, -record_id, -species_id)        #select columns except these two columns
 
+#Filter for a particular year
 
+filter(surveys, year == 1995)                   #similar to select, but it's filtering and will show you all the 1995 data
+
+surveys_1995 <- filter(surveys, year == 1995)
+
+surveys2 <- filter(surveys, weight<5)
+surveys_snl <- select(surveys2, species_id, sex, weight)
+
+surveys_snl <- select(filter(surveys, weight <5), species_id, sex, weight) #this line does the same thing as lines 63 and 64
 
 
 
@@ -51,10 +71,20 @@ download.file(url = "https://ndownloader.figshare.com/files/2292169",
 # Pipes
 #-------
 
+# The pipe is --> %>%
+# Shortcut --> ctrl + shift + m or command + shift + m
 
+# You don't have to keep typing your data frame anymore
 
+surveys_snl <- surveys %>% 
+  filter(weight < 5) %>% 
+  select(species_id, sex, weight)
 
-
+# This order can be less computationally intensive
+surveys_snl2 <- surveys %>% 
+  select(species_id, sex, weight)  %>% 
+  filter(weight < 5)
+  
 
 #-----------
 # CHALLENGE
@@ -64,17 +94,34 @@ download.file(url = "https://ndownloader.figshare.com/files/2292169",
 # retain only the columns ```year```, ```sex```, and ```weight```.
 
 
+surveys_sub <- surveys %>% 
+  select(year, sex, weight) %>% 
+  filter(year < 1995)  
 
+
+surveys_sub <- surveys %>% 
+  select(year, weight, sex) %>%   #ordering your columns does matter
+  filter(year < 1995)  
+  
 
 
 #--------
 # Mutate
 #--------
 
+surveys_weights <- surveys %>% 
+  mutate(weight_kg = weight/1000,
+         weight_lb = weight_kg * 2.2)
 
-
-
-
+surveys %>% 
+  filter(weight!="") %>% 
+  mutate(weight_kg = weight/1000) %>% 
+  head(20)
+       
+surveys %>% 
+  filter(!is.na(weight)) %>% 
+  mutate(weight_kg = weight/1000) %>% 
+  head(20)
 
 #-----------
 # CHALLENGE
@@ -87,6 +134,10 @@ download.file(url = "https://ndownloader.figshare.com/files/2292169",
 
 # Hint: think about how the commands should be ordered to produce this data frame!
 
+surveys_hindfoot <- surveys %>% 
+  select(species_id, hindfoot_length) %>% 
+  mutate(hindfoot_cm = hindfoot_length * 0.1) %>% 
+  filter(!is.na(hindfoot_cm!=""), hindfoot_cm < 3)
 
 
 
