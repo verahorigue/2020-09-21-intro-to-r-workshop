@@ -260,48 +260,98 @@ heaviest_animal5 <-surveys %>%    #this worked, although one obs was repeated
   top_n(1,weight) %>% 
   arrange(year)
 
+heaviest_animal6 <-surveys %>%    #THIS WORKED!
+  filter(!is.na(weight)) %>%      #removed NA
+  group_by(year) %>%              #grouped by year
+  filter(weight == max(weight)) %>%   #shows max weight per year
+  select(year, genus, species, weight) %>% #shows only these columns
+  arrange(year) %>%                        #arranged by year ascending (default)
+  distinct()                      #this removed the double year
+  top_n(1,weight) %>% 
+  arrange(year)
+
 #-----------
 # Reshaping
 #-----------
+#This is equivalent to the PIVOT Table in excel 
+  
+  #Pivot table is long
+  
+surveys_gw <- surveys %>%                #this will have three columns
+    filter(!is.na(weight)) %>% 
+    group_by(plot_id, genus) %>% 
+    summarise(mean_weight=mean(weight))
+  
+  #Want to pivot wider
+  #depending on the version of tidyverse, can be spread or gather
+  
+  # Spread: convert long data to wide data
+  # Gather: convert wide data to long data
+  
 
+surveys_wider <- surveys_gw %>%           #each column represents a genus, with weight as values
+  spread(key=genus, value = mean_weight)
+str(survey_wider)
 
-
-
-
-
+surveys_gather <-surveys_wider %>% 
+  gather(key=genus, value=mean_weight, -plot_id)
+str(surveys_gather)
 
 #-----------
 # CHALLENGE
 #-----------
 
-# 1. Spread the surveys data frame with year as columns, plot_id as rows, 
-#    and the number of genera per plot as the values. You will need to summarize before reshaping, 
-#    and use the function n_distinct() to get the number of unique genera within a particular chunk of data. 
-#    It’s a powerful function! See ?n_distinct for more.
+# 1. Spread the surveys data frame with year as columns, plot_id as rows,
+#	and the number of genera per plot as the values. You will need to summarize before reshaping,
+#	and use the function n_distinct() to get the number of unique genera within a particular chunk of data.
+#	It’s a powerful function! See ?n_distinct for more.
+# Get the total number of distinct genera found in each plot and year 
 
-# 2. Now take that data frame and pivot_longer() it again, so each row is a unique plot_id by year combination.
+surveys_spread_genus <- surveys %>% 
+  group_by(plot_id, year) %>% 
+  summarise(n_genus = n_distinct(genus)) %>% 
+  spread(year,n_genus)
 
-# 3. The surveys data set has two measurement columns: hindfoot_length and weight. 
-#    This makes it difficult to do things like look at the relationship between mean values of each 
-#    measurement per year in different plot types. Let’s walk through a common solution for this type of problem. 
-#    First, use pivot_longer() to create a dataset where we have a key column called measurement and a value column that 
-#    takes on the value of either hindfoot_length or weight. 
-#    Hint: You’ll need to specify which columns are being pivoted.
-
-# 4. With this new data set, calculate the average of each measurement in each year for each different plot_type. 
-#    Then pivot_wider() them into a data set with a column for hindfoot_length and weight. 
-#    Hint: You only need to specify the key and value columns for pivot_wider().
+head(surveys_spread_genus)
 
 
+# 2. Now take that data frame and gather() it again, so each row is a unique plot_id by year combination.
 
+surveys_gather_genus <-surveys_spread_genus %>% 
+  gather(key=year, value=n_distinct, -plot_id)
 
+head(surveys_gather_genus)
+
+# 3. The surveys data set has two measurement columns: hindfoot_length and weight.
+#	This makes it difficult to do things like look at the relationship between mean values of each
+#	measurement per year in different plot types. Let’s walk through a common solution for this type of problem.
+#	First, use gather() to create a dataset where we have a key column called measurement and a value column that
+#	takes on the value of either hindfoot_length or weight.
+#	Hint: You’ll need to specify which columns are being pivoted.
+
+surveys_long <- surveys %>% 
+  gather("measurement", "value", hindfoot_length, weight)
+  #spread(year,n_genus)
+
+head(surveys_long)
+
+# 4. With this new data set, calculate the average of each measurement in each year for each different plot_type.
+#	Then spread() them into a data set with a column for hindfoot_length and weight.
+#	Hint: You only need to specify the key and value columns for spread().
+
+surveys_long2 <- surveys_long %>% 
+  group_by(year, measurement, plot_type) %>% 
+  summarise(mean_value = mean(measurement,na.rm=TRUE)) %>% 
+  spread(measurement, mean_value)
+
+tail(surveys_long2)
 
 #----------------
 # Exporting data
 #----------------
 
 
-
+write_csv(surveys_long2, path = "data_out/surveys_long2.csv")
 
 
 
