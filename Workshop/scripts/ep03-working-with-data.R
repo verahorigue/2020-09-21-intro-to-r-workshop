@@ -141,13 +141,64 @@ surveys_hindfoot <- surveys %>%
 
 
 
-
 #---------------------
 # Split-apply-combine
 #---------------------
 
 
+surveys %>% 
+  group_by(sex) %>% 
+  summarise (mean_weight = mean(weight, na.rm = TRUE))
 
+# if you have conflicting packages, so it would be good to specify
+
+surveys %>% 
+  dplyr::group_by(sex) %>% 
+  summarise(mean_weight = mean(weight, na.rm = TRUE))
+
+#surveys$sex <-as.factor(surveys$sex)
+
+# remove NA, group and get weight by sex and species id
+surveys_sex_weight <- surveys %>% 
+  filter(!is.na(weight), !is.na(sex)) %>% 
+  group_by(sex, species_id) %>% 
+  summarise(mean_weight = mean(weight)) %>% 
+  print(n=20)                           # this is similar to doing head or tail, but you're specifying how many rows to show
+
+
+# to summarise data as above, and arrange by min_weight
+surveys %>% 
+  filter(!is.na(weight), !is.na(sex)) %>% 
+  group_by(sex, species_id) %>% 
+  summarise(mean_weight = mean(weight), 
+            min_weight = min(weight)) %>% 
+  #arrange(min_weight)                      #arrange by min_weight column
+  #arrange(mean_weight)                     #arrange by mean_weight column
+  #arrange(desc(min_weight))                #default arrange is ascending, so adding desc() will do descending order
+  arrange(-min_weight)                      #does the same as desc()
+
+# to summarise the data by count
+surveys %>% 
+  count(sex)
+
+# this also does the same thing as above, just longer code
+surveys %>% 
+  group_by(sex) %>% 
+  summarise(count=n())
+
+
+# using group_by for multiple variables
+surveys_new <- surveys %>% 
+  group_by(sex, species, taxa ) %>% 
+  summarise(count=n()) %>% 
+  ungroup()
+
+str(surveys_new)
+
+surveys_new %>% 
+  summarise(mean_weight = mean(weight),
+            min_weight = min(weight),
+            max_weight = max(weight))
 
 
 
@@ -156,17 +207,58 @@ surveys_hindfoot <- surveys %>%
 #-----------
 
 # 1. How many animals were caught in each ```plot_type``` surveyed?
+num_animals_plot < - surveys %>% 
+  count(plot_type)
+
 
 # 2. Use ```group_by()``` and ```summarize()``` to find the mean, min, and max hindfoot length 
 #    for each species (using ```species_id```). Also add the number of observations 
 #    (hint: see ```?n```).
 
+species_hindfoot <- surveys %>% 
+  filter(!is.na(hindfoot_length)) %>% 
+  group_by(species_id) %>% 
+  summarise(mean_footlength = mean(hindfoot_length),
+          min_footlength = min(hindfoot_length),
+          max_footlength = max(hindfoot_length),
+          count = n())
+
+
+
 # 3. What was the heaviest animal measured in each year? 
 #    Return the columns ```year```, ```genus```, ```species_id```, and ```weight```.
 
+heaviest_animal <- surveys %>%    #this option returns only 2 vars don't know why
+  select(year, genus, species_id, weight) %>% 
+  group_by(year) %>% 
+  summarise(max_weight = max(weight, na.rm = TRUE)) %>% 
+  ungroup()
 
+heaviest_animal2 <- surveys %>%   #this option returned 5 variables, all obs (didn't group)
+  group_by(year) %>% 
+  select(year, genus, species_id, weight) %>% 
+  mutate(max_weight = max(weight, na.rm=TRUE)) %>% 
+  ungroup()
 
+heaviest_animal3 <- surveys %>%   #this worked, although one obs was repeated
+  filter(!is.na(weight)) %>% 
+  group_by(year) %>% 
+  filter(weight == max(weight)) %>% 
+  select(year, genus, species_id, weight) %>% 
+  arrange(year)
 
+heaviest_animal4 <- surveys %>%   #this worked, although one obs was repeated
+  filter(!is.na(weight)) %>% 
+  group_by(year) %>% 
+  filter(weight == max(weight)) %>% 
+  select(year, genus, species, weight) %>% 
+  arrange(year)
+
+heaviest_animal5 <-surveys %>%    #this worked, although one obs was repeated
+  select(year, genus, species, weight) %>% 
+  group_by(year) %>% 
+  top_n(1,weight) %>% 
+  arrange(year)
 
 #-----------
 # Reshaping
